@@ -239,43 +239,7 @@ This section:
 
 ---
 
-## Suggested Project Structure
 
-For better organization, the files can be arranged like this:
-
-```text
-project/
-│
-├── scripts/
-│   ├── preprocess_and_middle_matrix.mlx
-│   ├── finalextractEyeClosed.m
-│   ├── plot_duration_by_trial.m
-│   └── shortest_time.m
-│
-├── data/
-│   ├── raw/
-│   ├── processed/
-│   └── events/
-│
-├── outputs/
-│   ├── .set files
-│   ├── .mat files
-│   └── logs/
-│
-└── README.md
-```
-
----
-
-## Example Usage
-
-```matlab
-% Extract eye-closed segments
-[finalMatrix, extractedTrials, EyeClosedTimes, EEGclean] = finalextractEyeClosedTrials(EEG, 65, 1000);
-
-% Save the output
-save('subject01_finalMatrix.mat', 'finalMatrix', 'extractedTrials', 'EEGclean');
-```
 
 ---
 
