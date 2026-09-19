@@ -58,7 +58,146 @@ This section reads trial durations from `SubAll.docx` and plots the mean ± stan
 
 This section finds the shortest trial duration for each subject and reports subjects whose shortest trial is above or below a chosen threshold (for example, 1000 samples).
 
+### 5) `fevsm` — Female vs Male EEG Band-Power Topography
+
+This MATLAB script performs a **subject-level scalp topography analysis of EEG band power**, comparing Female and Male participants.
+
+**Main analyses:**
+
+* Uses the preprocessed `*_middle_matrix_*.mat` files containing `middleMatrix` data.
+* Analyzes **57 EEG channels**.
+* Uses up to **10 trials per subject**.
+* Calculates EEG power across five frequency bands:
+
+  * Delta: 1–3 Hz
+  * Theta: 4–7 Hz
+  * Alpha: 8–12 Hz
+  * Beta: 13–25 Hz
+  * Gamma: 30–40 Hz
+* Applies Butterworth band-pass filtering and calculates mean squared power.
+* Produces subject-level scalp topographies for Female and Male groups.
+* Performs channel-wise statistical testing with automatic assumption checking:
+
+  * Kolmogorov–Smirnov normality test
+  * Variance testing
+  * Independent-samples t-test
+  * Welch's t-test when variances are unequal
+  * Wilcoxon rank-sum test for non-normal data
+
+**Main outputs:**
+
+* `topography_subjectlevel_autoStats.mat`
+* `power_topography_Fe_M_autoStats.png`
+* `negLogP_topography_autoStats.png`
+
 ---
+
+### 6) `highvslow` — Low IQ vs High IQ EEG Band-Power Topography
+
+This MATLAB script performs a **subject-level scalp topography analysis of EEG band power**, comparing predefined Low IQ and High IQ groups.
+
+**Main analyses:**
+
+* Uses preprocessed `*_middle_matrix_*.mat` files containing `middleMatrix`.
+* Analyzes **57 EEG channels**.
+* Uses up to **10 trials per subject**.
+* Calculates EEG power in five frequency bands:
+
+  * Delta: 1–3 Hz
+  * Theta: 4–7 Hz
+  * Alpha: 8–12 Hz
+  * Beta: 13–25 Hz
+  * Gamma: 30–40 Hz
+* Applies third-order Butterworth band-pass filtering.
+* Calculates subject-level mean band power across trials.
+* Generates scalp topographies for Low IQ and High IQ groups.
+* Performs channel-wise statistical testing with automatic assumption checking:
+
+  * Kolmogorov–Smirnov normality test
+  * Variance test
+  * Independent-samples t-test
+  * Welch's t-test when variances are unequal
+  * Wilcoxon rank-sum test for non-normal data
+* Generates `-log10(p)` scalp maps to visualize channel-wise statistical differences.
+
+**Main outputs:**
+
+* `topography_subjectlevel_IQ_autoStats.mat`
+* `power_topography_LowHigh_IQ.png`
+* `negLogP_topography_LowHigh_IQ.png`
+
+---
+
+### 7) `complexANDreg` — EEG Lempel-Ziv Complexity and Regression Analysis
+
+This MATLAB script performs **Lempel-Ziv Complexity (LZC) analysis of eyes-closed EEG** at the subject and channel levels, followed by group comparison and regression analyses.
+
+**Main analyses:**
+
+* Uses preprocessed `*_middle_matrix_*.mat` files containing `middleMatrix` with dimensions:
+  `[trials × channels × samples]`
+
+* Analyzes **57 EEG channels**.
+
+* Uses all available trials by default.
+
+* Calculates normalized **Lempel-Ziv Complexity (LZC)** for each trial and channel using median-based binarization.
+
+* Computes subject-level mean LZC across valid trials.
+
+* Performs **Female vs Male** channel-wise comparison using Welch's t-test.
+
+* Performs multiple linear regression for each channel:
+
+  `LZC ~ FSIQ + Gender + Age`
+
+* Gender is coded as:
+
+  * Female = 0
+  * Male = 1
+
+* Applies **Benjamini–Hochberg FDR correction across the 57 channels** separately for:
+
+  * FSIQ
+  * Gender
+  * Age
+
+* Performs quality-control checks on LZC variation and available demographic data.
+
+* Generates scalp topographies for:
+
+  * Mean LZC
+  * Male minus Female LZC difference
+  * FDR-adjusted gender p-values
+  * FSIQ regression beta
+  * FDR-adjusted FSIQ p-values
+  * Age regression beta
+
+**Required demographic variables:**
+
+* `Code`
+* `FSIQ`
+* `Gender`
+* `Age`
+
+Subject IDs are standardized to the format `CBM#####` to match the EEG filenames.
+
+**Main outputs:**
+
+* `LZC_subject_channel.mat`
+* `LZC_gender_results.xlsx`
+* `LZC_gender_results.mat`
+* `LZC_regression_results.xlsx`
+* `LZC_regression_results.mat`
+* `LZC_qc_summary.xlsx`
+* `LZC_COMPLETE_RESULTS.mat`
+* `LZC_mean_topography.png`
+* `LZC_gender_difference_topography.png`
+* `LZC_gender_pvalues_topography.png`
+* `LZC_FSIQ_beta_topography.png`
+* `LZC_FSIQ_regression_pvalues.png`
+* `LZC_Age_beta_topography.png`
+--------------------------------------------------------------------------
 
 ## Requirements
 
